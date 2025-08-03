@@ -1,5 +1,4 @@
-let humanScore = 0;
-let computerScore = 0;
+
 
 function getComputerChoice(){
     let choice = Math.random%3;
@@ -31,15 +30,38 @@ function playRound(humanChoice, computerChoice) {
               (humanChoice === "paper" && computerChoice === "rock") ||
               (humanChoice === "scissors" && computerChoice === "paper")) {
         console.log(`You win! ${humanChoice} beats ${computerChoice}.`);
-        humanScore++;
         return "human";
     } else {
         console.log(`You lose! ${computerChoice} beats ${humanChoice}.`);
-        computerScore++;
         return "computer";
     }
 }
 
-playRound(getHumanChoice(), getComputerChoice());
+const roundNumber = 5;
+function playGame(roundNumber){
+    let humanScore = 0;
+    let computerScore = 0;
 
-console.log(`Current Score - You: ${humanScore}, Computer: ${computerScore}`);
+    for (let i = 0; i < roundNumber; i++) {
+        console.log(`Round ${i + 1}`);
+        const humanChoice = getHumanChoice();
+        console.log(`You chose: ${humanChoice}`);
+        const computerChoice = getComputerChoice();
+        console.log(`Computer chose: ${computerChoice}`);
+        const winner = playRound(humanChoice, computerChoice);
+
+        if (winner === "human") {
+            humanScore++;
+        } else if (winner === "computer") {
+            computerScore++;
+        }
+        console.log(`Current Score - You: ${humanScore}, Computer: ${computerScore}`);
+    }
+
+    if (humanScore > computerScore) {
+        console.log(`You win the game! Final Score - You: ${humanScore}, Computer: ${computerScore}`);
+    }    
+
+}
+
+playGame(roundNumber)

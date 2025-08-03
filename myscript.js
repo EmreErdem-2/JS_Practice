@@ -79,3 +79,89 @@ fizzButton.addEventListener("click", () => {
         }
     }
 });
+
+
+let arr1 = ["I", "study", "JavaScript"];
+
+// arr.splice(1, 1); // from index 1 remove 1 element
+delete arr1[1]
+console.log( arr1 ); // ["I", "JavaScript"]
+console.log(arr1.length);
+
+function sumTripleEvens(array) {
+    return array.filter(num=>num%2===0)
+                .map(num=>num*3)
+                .reduce((total, current) => total + current, 0);
+}
+console.log(sumTripleEvens([1, 2, 3, 4, 5, 6])); // 36
+
+function camelizer(string) {
+    let arrayString = string.split('');
+    for(let i=0; i<arrayString.length; i++){
+        if(arrayString[i]=='-'){
+            arrayString[i]='';
+            arrayString[i+1]=arrayString[i+1].toUpperCase();
+        }
+    }
+
+    return arrayString.join("");
+}
+console.log(camelizer("background-color"));
+console.log(camelizer("list-style-image"));
+console.log(camelizer("-webkit-transition"));
+
+console.log("-----------------------------");
+function filterRange(arr, a,b){
+    return arr.filter(num => num>=a && num<=b)
+}
+
+let arr = [5, 3, 8, 1];
+let filtered = filterRange(arr, 1, 4);
+
+console.log(filtered); // 3,1 (matching values)
+console.log(arr); // 5,3,8,1 (not modified)
+
+console.log("-----------------------------");
+let arr2 = [5, 2, 1, -10, 8];
+
+arr2 = arr2.sort(function(a,b){return b-a});
+console.log( arr2 ); // 8, 5, 2, 1, -10
+
+console.log("-----------------------------");
+let arr3 = ["HTML", "JavaScript", "CSS"];
+function copySorted(array){
+    let clone = [...array]; // clone = [1, 2, 3];
+    return clone.sort();
+}
+let sorted = copySorted(arr3);
+
+console.log( sorted ); // CSS, HTML, JavaScript
+console.log( arr3 ); // HTML, JavaScript, CSS (no changes)
+
+console.log("-----------------------------");
+let arr4 = [1, 2, 3];
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+  console.log(array)
+}
+shuffle(arr4);
+shuffle(arr4);
+shuffle(arr4);
+
+console.log("-----------------------------");
+function unique(array) {
+  return array.reduce(function(total,current){
+    if(!total.includes(current)){
+        total.push(current);
+    }
+    return total;
+  },[]);
+}
+
+let strings = ["Hare", "Krishna", "Hare", "Krishna",
+  "Krishna", "Krishna", "Hare", "Hare", ":-O"
+];
+
+console.log( unique(strings) ); // Hare, Krishna, :-O
+console.log("-----------------------------");
+
