@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping list example</title>
+    <style>
+      li {
+        margin-bottom: 10px;
+      }
+
+      li button {
+        font-size: 12px;
+        margin-left: 20px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>My shopping list</h1>
+
+    <div>
+      <label for="item">Enter a new item:</label>
+      <input type="text" name="item" id="item">
+      <button>Add item</button>
+    </div>
+
+    <ul>
+
+    </ul>
+
+    <script>
+        console.log(document.querySelector("ul"));
+        let listItems =  [];
+
+        const inputField = document.querySelector("#item");
+        inputField.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            console.log("Enter key pressed while input is focused");
+            listAppend()
+        }
+        });
+        const addButton = document.querySelector("div>button");
+        addButton.addEventListener("click", () => {
+            listAppend()
+        });
+
+        function listAppend(){
+            const item = document.querySelector("#item");
+            console.log("itemname: ",item.value);
+            addToList(item.value);
+
+            item.value ="";
+            item.focus();
+        }
+        function addToList(input){
+            listItems.push(input);
+            createListItem(input);
+            console.log("all list items after create: ", listItems);
+        }
+        function createListItem(input){
+            const btn = document.createElement("button");
+            btn.style.backgroundColor="red";
+            btn.textContent="delete";
+            btn.addEventListener("click",(event)=>{
+                deleteItem(event);
+            });
+            const li = document.createElement("li");
+            li.textContent=input;
+            li.appendChild(btn);
+
+            document.querySelector("ul").appendChild(li);
+        }
+        function deleteItem(event){
+            const listParent = event.target.parentElement;
+            listParentText = getOwnText(listParent);
+            console.log("parent element text content: ", listParentText);
+            index = listItems.findIndex(item=>item==listParentText);
+            console.log("index of delete item: ", index);
+            listItems.splice(index,1);
+            
+            console.log("all list items after delete: ", listItems);
+            listParent.remove();
+        }
+
+
+         function getOwnText(el) {
+            return Array.from(el.childNodes)
+            .filter(node => node.nodeType === Node.TEXT_NODE)
+            .map(node => node.textContent.trim())
+            .join(" ");
+        }
+
+    </script>
+  </body>
+</html>
