@@ -56,3 +56,12 @@ btn3.addEventListener("click", function (e) {
   console.log("after"); 
   console.log(e.target.style.background); 
 });
+
+const buttons = document.querySelector("#container").childNodes;
+
+console.log(buttons);
+buttons.forEach(button => {
+    button.addEventListener("click", ()=>{
+        alert(button.id);
+    });
+});
