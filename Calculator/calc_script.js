@@ -1,27 +1,4 @@
 
-function operator(a,operator,b){
-    let result = 0;
-    switch (operator) {
-    case '=':
-        //print result to diplay
-        break;
-    case '+':
-        result = add(a,b);
-        break;
-    case '-':
-        result = subtract(a,b);
-        break;
-    case '*':
-        result = multiply(a,b);
-        break;
-    case '/':
-        result = divide(a,b);
-        break;
-    default:
-    
-    }
-}
-
 function add(a,b){
     return a + b;
 }
@@ -36,6 +13,96 @@ function divide(a,b){
 }
 
 
+function operator(a,operator,b){
+    let result = 0;
+    switch (operator) {
+    case '=':
+        return result;
+        break;
+    case '+':
+        result = add(a,b);
+        console.log("Operator: "+result);
+        return result;
+        break;
+    case '-':
+        result = subtract(a,b);
+        return result;
+        break;
+    case '*':
+        result = multiply(a,b);
+        return result;
+        break;
+    case '/':
+        result = divide(a,b);
+        return result;
+        break;
+    default:
+        return result;
+    }
+}
+
+function getSingleOperator(str) {
+  const match = str.match(/[+\-*/%^]/);
+  return match ? match[0] : null;
+}
+
+function inputOperator(inputString,inputOp) {
+    inputString=inputString.replace(' ','');
+    if(inputOp==="Clear") return "";
+    if(inputString===null && inputOp!='-') return "";
+    else if(inputString===null && inputOp==='-') return "-";
+
+    const op = getSingleOperator(inputString);
+    if(op===null){
+        console.log("no operator in input string");
+        return inputString+" "+inputOp+" ";
+    }
+    else{
+        if(inputString==="-" && inputOp!="-") return "";
+        else if(inputString==="-" && inputOp==="-") return inputString;
+        if(inputString[inputString.length-1]===op){
+            const singleNum = inputString.split(op);
+            return singleNum+" "+inputOp+" ";
+        }
+        console.log("operator in input string: " + op);
+        let numbers = inputString.split(op);
+        numbers = [...numbers.map(item=>parseFloat(item))];
+        const result = operator(numbers[0],op,numbers[1]);
+        return result+" "+inputOp+" ";
+    }
+}
+function inputNumber(inputString,buttonNum) {
+    if(inputString==="0"){
+        return buttonNum;
+    }
+    else{
+        return inputString += buttonNum;
+    }
+}
+
+function operator(a,operator,b){
+    let result = 0;
+    switch (operator) {
+    case '=':
+        return result;
+        break;
+    case '+':
+        result = add(a,b);
+        console.log("Operator: "+result);
+        break;
+    case '-':
+        result = subtract(a,b);
+        break;
+    case '*':
+        result = multiply(a,b);
+        break;
+    case '/':
+        result = divide(a,b);
+        break;
+    default:
+        return result;
+    }
+}
 
 const createButtons = function() {
     const row1 = document.createElement("div");
@@ -114,14 +181,40 @@ const createButtons = function() {
     row4.appendChild(buttDot);
     row4.appendChild(buttEqual);
     row4.appendChild(buttDivide);
+    
+    inputField = document.querySelector("input");
 
+    const clearButton = document.createElement("button");
+    clearButton.classList.add("operator");
+    clearButton.textContent = "Clear";
+    clearButton.addEventListener("click", ()=>{
+        inputField.value="";
+    });
+    
     const container = document.querySelector('.buttonContainer');
     container.appendChild(row1);
     container.appendChild(row2);
     container.appendChild(row3);
     container.appendChild(row4);
+    container.appendChild(clearButton);
+
+    const numberButtons = document.querySelectorAll(".number");
+    const operatorButtons = document.querySelectorAll(".operator");
     
-    console.log("adsada " + container);
+    numberButtons.forEach(element => {
+        element.addEventListener("click",()=>{
+            inputField.value = inputNumber(inputField.value,element.textContent);
+            console.log("Number clicked: "+ element.textContent);
+        });
+    });
+
+    operatorButtons.forEach(element => {
+        element.addEventListener("click",() => {
+            inputField.value = inputOperator(inputField.value,element.textContent);
+            console.log("Operator clicked: "+ element.textContent);
+        });
+    });
 }
+
 
 createButtons();
