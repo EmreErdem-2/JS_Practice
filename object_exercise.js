@@ -88,18 +88,6 @@ let usersById = groupById(users5);
 console.log(usersById);
 
 // Object Constructor
-function Player(name, marker) {
-  if (!new.target) {
-    throw Error("You must use the 'new' operator to call the constructor");
-  }
-  this.name = name;
-  this.marker = marker;
-  this.sayName = function() { console.log(this.name)};
-}
-const player = new Player('steve', 'X');
-console.log(player.name); // 'steve'
-player.sayName();
-
 function Book(title,author,pages,read){
   if(!new.target){
     throw Error("You must use the 'new' operator to call the constructor");
@@ -115,3 +103,54 @@ function Book(title,author,pages,read){
 
 const theHobbit = new Book("The Hobbit", "JRR Tolkien",255, true);
 console.log(theHobbit.info());
+
+
+function Player(name, marker) {
+  if (!new.target) {
+    throw Error("You must use the 'new' operator to call the constructor");
+  }
+  this.name = name;
+  this.marker = marker;
+  this.sayName = function() { console.log(this.name)};
+}
+const player1 = new Player('steve', 'X');
+const player2 = new Player('martin', 'N');
+console.log(player1.name); // 'steve'
+player2.sayName();
+
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.sayName = function() {
+  console.log(`Hello, I'm ${this.name}`);
+};
+
+console.log("prototype of Player.prototype "+Object.getPrototypeOf(Player.prototype));
+
+Object.setPrototypeOf(Player.prototype, Person.prototype);
+console.log("prototype of Player.prototype "+Object.getPrototypeOf(Player.prototype));
+
+// Prototype Practice
+let head = {
+  glasses: 1
+};
+
+let table = {
+  pen: 3
+};
+
+let bed = {
+  sheet: 1,
+  pillow: 2
+};
+
+let pockets = {
+  money: 2000
+};
+Object.setPrototypeOf(table, head);
+Object.setPrototypeOf(bed, table);
+Object.setPrototypeOf(pockets, bed);
+
+// alert( pockets.pen ); // 3
+// alert( bed.glasses ); // 1
+// alert( table.money ); // undefined
