@@ -182,6 +182,7 @@ const createButtons = function() {
     const buttDot = document.createElement("button");
     buttDot.classList.add("operator");
     buttDot.textContent = ".";
+    buttDot.id = "Decimal";
     const buttEqual = document.createElement("button");
     buttEqual.classList.add("operator");
     buttEqual.textContent = "=";

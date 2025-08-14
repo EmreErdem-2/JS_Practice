@@ -40,9 +40,21 @@ input[type="text"] {
     background-color: rgb(255, 255, 255);
     border: 1px solid #ffffff;
 }
+.operator:disabled {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(104, 47, 47);
+    border: 1px solid #ffffff;
+}
 .operator:hover {
     width: 100px;
     height: 100px;
     background-color: rgb(116, 113, 113);
+    border: 1px solid #ffffff;
+}
+.utility {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(255, 255, 255);
     border: 1px solid #ffffff;
 }
