@@ -26,8 +26,25 @@ export function createTable(headersArr){
     return table;
 }
 
-export function addToTable(book, tbl){
+function removeFromArray(books,targetId){
+    const index = books.findIndex(book => book.id === targetId);
+    if (index !== -1) {
+    books.splice(index, 1); // removes the item in-place
+    }
+}
+function removeButton(row,myLibrary){
+    const remButt = document.createElement("button");
+    remButt.style.backgroundColor = "red";
+    remButt.addEventListener("click", ()=>{
+        removeFromArray(myLibrary,row.dataset.id);
+    });
+
+    return remButt;
+}
+
+export function addToTable(book, tbl, myLibrary){
     let row = tbl.insertRow();
+    row.setAttribute("data-id", book.id);
 
     let idCell = row.insertCell();
     idCell.textContent = book.id;
@@ -38,6 +55,9 @@ export function addToTable(book, tbl){
     let pagesCell = row.insertCell();
     pagesCell.textContent = book.pages;
     
+    let removeCell = row.insertCell();
+    
+    removeCell.appendChild(removeButton(row,myLibrary))
 }
 
 export function populateTable(bookArray, tbl){
