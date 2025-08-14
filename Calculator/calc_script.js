@@ -33,6 +33,10 @@ function operator(a,operator,b){
         return result;
         break;
     case '/':
+        if(b===0){
+            alert("can't divide by 0!!");
+            return 0;
+        } 
         result = divide(a,b);
         return result;
         break;
@@ -42,65 +46,88 @@ function operator(a,operator,b){
 }
 
 function getSingleOperator(str) {
-  const match = str.match(/[+\-*/%^]/);
-  return match ? match[0] : null;
+    if(str[0]==="-") str=str.slice(1,str.length);
+    const match = str.match(/[+\-*/%^]/);
+    return match ? match[0] : null;
 }
-
-function inputOperator(inputString,inputOp) {
-    inputString=inputString.replace(' ','');
-    if(inputOp==="Clear") return "";
-    if(inputString===null && inputOp!='-') return "";
-    else if(inputString===null && inputOp==='-') return "-";
-
-    const op = getSingleOperator(inputString);
-    if(op===null){
-        console.log("no operator in input string");
-        return inputString+" "+inputOp+" ";
+function checkDecimal(str){
+    if(str[0]==="-") str=str.slice(1,str.length);
+    if(str[str.length-1].match(/[+\-*/%^]/)) str=str.slice(0,str.length-1);
+    const op = getSingleOperator(str);
+    let dotCount=0;
+    if(op==null){
+        dotCount = (str.match(/\./g) || []).length;
+        if(dotCount>=1) return false;
+        else return true;
     }
     else{
+        const numbers = str.split(op);
+        dotCount = (numbers[1].match(/\./g) || []).length;
+        if(dotCount>=1) return false;
+        else return true;
+    }
+}
+function deleteOne(string){
+    return string.slice(0,-1);
+}
+isResult = false;
+
+function inputOperator(inputString,inputOp) {
+    isResult=false;
+    inputString=inputString.replace(/ /g, '');
+    
+    if(inputString==="-" && inputOp==="-") return inputString;
+    else if(inputString==="-" && inputOp!="-") return "";
+
+    if(inputString==="" && inputOp!='-') return "";
+    else if(inputString==="" && inputOp==='-') return "-";
+
+    if(inputOp==="." && !checkDecimal(inputString)) {
+        return inputString;
+    }
+    const op = getSingleOperator(inputString);
+
+    if(op===null){
+        if(inputOp=='=') return inputString;
+        if(inputOp=='.') return inputString+inputOp;
+        return inputString+inputOp;
+    }
+    else{
+        console.log(inputString);
+        console.log("last: "+inputString[inputString.length-1]);
         if(inputString==="-" && inputOp!="-") return "";
         else if(inputString==="-" && inputOp==="-") return inputString;
-        if(inputString[inputString.length-1]===op){
+
+        if(inputString[inputString.length-1]===op){ //last character is the operator in the string
+            console.log(inputString);
+            if(inputOp==="=") return deleteOne(inputString);
+            else if(inputOp===".") return deleteOne(inputString)+inputOp;
             const singleNum = inputString.split(op);
-            return singleNum+" "+inputOp+" ";
+            return singleNum[0]+inputOp;
         }
+
+        if(inputOp===".") return inputString+inputOp;
+
         console.log("operator in input string: " + op);
         let numbers = inputString.split(op);
         numbers = [...numbers.map(item=>parseFloat(item))];
-        const result = operator(numbers[0],op,numbers[1]);
-        return result+" "+inputOp+" ";
+        let longResult = operator(numbers[0],op,numbers[1]);
+        const result = Math.floor(longResult * 100) / 100;
+        if(inputOp==="=") {
+            isResult=true; 
+            return result.toString(); 
+        }
+
+        return result.toString()+inputOp;
     }
 }
 function inputNumber(inputString,buttonNum) {
-    if(inputString==="0"){
+    if(inputString==="0" || isResult){
+        isResult=false;
         return buttonNum;
     }
     else{
         return inputString += buttonNum;
-    }
-}
-
-function operator(a,operator,b){
-    let result = 0;
-    switch (operator) {
-    case '=':
-        return result;
-        break;
-    case '+':
-        result = add(a,b);
-        console.log("Operator: "+result);
-        break;
-    case '-':
-        result = subtract(a,b);
-        break;
-    case '*':
-        result = multiply(a,b);
-        break;
-    case '/':
-        result = divide(a,b);
-        break;
-    default:
-        return result;
     }
 }
 
@@ -185,10 +212,16 @@ const createButtons = function() {
     inputField = document.querySelector("input");
 
     const clearButton = document.createElement("button");
-    clearButton.classList.add("operator");
+    clearButton.classList.add("utility");
     clearButton.textContent = "Clear";
     clearButton.addEventListener("click", ()=>{
         inputField.value="";
+    });
+    const delButton = document.createElement("button");
+    delButton.classList.add("utility");
+    delButton.textContent = "Delete";
+    delButton.addEventListener("click", ()=>{
+        inputField.value=deleteOne(inputField.value)
     });
     
     const container = document.querySelector('.buttonContainer');
@@ -197,6 +230,7 @@ const createButtons = function() {
     container.appendChild(row3);
     container.appendChild(row4);
     container.appendChild(clearButton);
+    container.appendChild(delButton);
 
     const numberButtons = document.querySelectorAll(".number");
     const operatorButtons = document.querySelectorAll(".operator");
