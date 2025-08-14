@@ -87,12 +87,31 @@ function groupById(users){
 let usersById = groupById(users5);
 console.log(usersById);
 
-/*
-// after the call we should have:
-
-usersById = {
-  john: {id: 'john', name: "John Smith", age: 20},
-  ann: {id: 'ann', name: "Ann Smith", age: 24},
-  pete: {id: 'pete', name: "Pete Peterson", age: 31},
+// Object Constructor
+function Player(name, marker) {
+  if (!new.target) {
+    throw Error("You must use the 'new' operator to call the constructor");
+  }
+  this.name = name;
+  this.marker = marker;
+  this.sayName = function() { console.log(this.name)};
 }
-*/
+const player = new Player('steve', 'X');
+console.log(player.name); // 'steve'
+player.sayName();
+
+function Book(title,author,pages,read){
+  if(!new.target){
+    throw Error("You must use the 'new' operator to call the constructor");
+  }
+  this.title=title;
+  this.author=author;
+  this.pages=pages;
+  this.read=read;
+  this.info=function(){
+    return this.title+" by "+this.author+", "+pages+" pages, "+`${this.read? "already read" : "not read yet"}`;
+  }
+}
+
+const theHobbit = new Book("The Hobbit", "JRR Tolkien",255, true);
+console.log(theHobbit.info());
