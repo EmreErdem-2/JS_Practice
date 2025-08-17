@@ -9,8 +9,8 @@ export function Book(title,author,pages,read) {
   this.read = read;
 }
 
-export function addBookToLibrary(arr,title,author,pages) {
-  const book = new Book(title,author,pages);
+export function addBookToLibrary(arr,title,author,pages,read) {
+  const book = new Book(title,author,pages,read);
   arr.push(book);
 }
 
@@ -39,7 +39,7 @@ function removeFromArray(books,targetId){
     tbl.appendChild(headerRow);
     populateTable(books, tbl);
 }
-function removeButton(row,myLibrary){
+function createRemoveButton(row,myLibrary){
     const remButt = document.createElement("button");
     remButt.style.backgroundColor = "red";
     remButt.textContent = "Delete";
@@ -78,11 +78,52 @@ export function addToTable(book, tbl, myLibrary){
     
     let removeCell = row.insertCell();
     
-    removeCell.appendChild(removeButton(row,myLibrary))
+    removeCell.appendChild(createRemoveButton(row,myLibrary))
 }
 
 export function populateTable(bookArray, tbl){
     bookArray.forEach(element => {
         addToTable(element, tbl,bookArray);
     });
+}
+
+export function createModal() {
+  const button = document.createElement("button");
+  button.textContent = "New Book";
+
+  const modal = document.createElement("div");
+  modal.className = "modal";
+
+  const modalContent = document.createElement("div");
+  modalContent.className = "modal-content";
+
+  const closeBtn = document.createElement("span");
+  closeBtn.className = "close";
+  closeBtn.innerHTML = "&times;";
+
+  const content = document.createElement("p");
+  content.textContent = "This is";
+
+  button.onclick = () => modal.style.display = "block";
+  closeBtn.onclick = () => modal.style.display = "none";
+
+  modalContent.appendChild(closeBtn);
+  modalContent.appendChild(content);
+  modal.appendChild(modalContent);
+
+  document.body.appendChild(button);
+  document.body.appendChild(modal);
+}
+
+
+
+export function newBookButton(bookArray){
+    const newBookButt = document.createElement("button");
+    remButt.style.backgroundColor = "yellow";
+    remButt.textContent = "New Book";
+    remButt.addEventListener("click", ()=>{
+        //Create input card
+    });
+
+    return remButt;
 }
