@@ -57,7 +57,7 @@ function createCheckbox(book){
         book.read = e.target.checked;
         console.log("book: "+book.read);
     });
-    return checkbox
+    return checkbox;
 }
 export function addToTable(book, tbl, myLibrary){
     const row = tbl.insertRow();
@@ -87,43 +87,106 @@ export function populateTable(bookArray, tbl){
     });
 }
 
-export function createModal() {
-  const button = document.createElement("button");
-  button.textContent = "New Book";
+function createInputField(labelText) {
+    const div = document.createElement("div");
+    const label = document.createElement("span");
+    const input = document.createElement("input");
 
-  const modal = document.createElement("div");
-  modal.className = "modal";
+    div.classList.add("field-wrapper");
+    label.classList.add("field-name");
+    label.textContent = labelText;
 
-  const modalContent = document.createElement("div");
-  modalContent.className = "modal-content";
+    input.classList.add("field-input");
+    input.name = labelText.toLowerCase(); // e.g. "title", "author"
 
-  const closeBtn = document.createElement("span");
-  closeBtn.className = "close";
-  closeBtn.innerHTML = "&times;";
+    div.appendChild(label);
+    div.appendChild(input);
 
-  const content = document.createElement("p");
-  content.textContent = "This is";
+    return { element: div, input };
+}
 
-  button.onclick = () => modal.style.display = "block";
-  closeBtn.onclick = () => modal.style.display = "none";
+function createModalCheckbox(labelText) {
+    const div = document.createElement("div");
+    const label = document.createElement("span");
+    const checkbox = document.createElement("input");
 
-  modalContent.appendChild(closeBtn);
-  modalContent.appendChild(content);
-  modal.appendChild(modalContent);
+    div.classList.add("field-wrapper");
+    label.classList.add("field-name");
+    label.textContent = labelText;
 
-  document.body.appendChild(button);
-  document.body.appendChild(modal);
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.style.alignSelf = "flex-start"
+    checkbox.name = labelText.toLowerCase(); // e.g. "read"
+
+    div.appendChild(label);
+    div.appendChild(checkbox);
+
+    return { element: div, checkbox };
+}
+export function createModal(addBookCallback) {
+    const modal = document.createElement("div");
+    modal.className = "modal";
+
+    const modalContent = document.createElement("div");
+    modalContent.className = "modal-content";
+
+    modal.addEventListener("click", (e) => {
+        if (!modalContent.contains(e.target)) document.body.removeChild(modal);
+    });
+
+    const closeBtn = document.createElement("span");
+    closeBtn.className = "close";
+    closeBtn.innerHTML = "&times;";
+    closeBtn.onclick = () => document.body.removeChild(modal);
+
+    const content = document.createElement("p");
+    content.textContent = "Enter the book";
+
+    // Create fields
+    const titleField = createInputField("Title");
+    const authorField = createInputField("Author");
+    const pagesField = createInputField("Pages");
+    const readCheckbox = createModalCheckbox("Read");
+
+    // Submit button
+    const submitBtn = document.createElement("button");
+    submitBtn.textContent = "Add Book";
+    submitBtn.style.alignSelf = "flex-end";
+    submitBtn.onclick = () => {
+        const book = {
+            title: titleField.input.value,
+            author: authorField.input.value,
+            pages: pagesField.input.value,
+            read: readCheckbox.checkbox.checked
+        };
+
+        addBookCallback(book); // Pass book to external handler
+        document.body.removeChild(modal); // Close modal
+    };
+
+    modalContent.appendChild(closeBtn);
+    modalContent.appendChild(content);
+    modalContent.appendChild(titleField.element);
+    modalContent.appendChild(authorField.element);
+    modalContent.appendChild(pagesField.element);
+    modalContent.appendChild(readCheckbox.element);
+    modalContent.appendChild(submitBtn);
+
+    modal.appendChild(modalContent);
+    return modal;
 }
 
 
-
-export function newBookButton(bookArray){
+export function newBookButton(){
     const newBookButt = document.createElement("button");
-    remButt.style.backgroundColor = "yellow";
-    remButt.textContent = "New Book";
-    remButt.addEventListener("click", ()=>{
-        //Create input card
+    newBookButt.style.backgroundColor = "yellow";
+    newBookButt.textContent = "New Book";
+    newBookButt.addEventListener("click", ()=>{
+        const modal = createModal();
+        modal.style.display = "block";
+        document.body.appendChild(modal);
     });
 
-    return remButt;
+    return newBookButt;
 }

@@ -11,4 +11,5 @@ let table = utils.createTable()
 div.appendChild(table);
 utils.populateTable(myLibrary, table);
 
+document.body.appendChild(utils.newBookButton());
 utils.createModal();
