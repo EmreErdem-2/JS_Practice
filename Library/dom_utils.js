@@ -13,8 +13,6 @@ export function addBookToLibrary(arr,title,author,pages,read) {
   const book = new Book(title,author,pages,read);
   arr.push(book);
 }
-
-
 export function createTable(){
     const headersArr = ["ID","Title","Author","Pages","Read"];
     const table = document.createElement("table");
@@ -27,7 +25,6 @@ export function createTable(){
 
     return table;
 }
-
 function removeFromArray(books,targetId){
     const index = books.findIndex(book => book.id === targetId);
     if (index !== -1) {
@@ -154,12 +151,12 @@ export function createModal(addBookCallback) {
     submitBtn.textContent = "Add Book";
     submitBtn.style.alignSelf = "flex-end";
     submitBtn.onclick = () => {
-        const book = {
-            title: titleField.input.value,
-            author: authorField.input.value,
-            pages: pagesField.input.value,
-            read: readCheckbox.checkbox.checked
-        };
+        const book = new Book(
+            titleField.input.value.trim(),
+            authorField.input.value.trim(),
+            Number(pagesField.input.value),
+            readCheckbox.checkbox.checked
+        );
 
         addBookCallback(book); // Pass book to external handler
         document.body.removeChild(modal); // Close modal
@@ -183,7 +180,10 @@ export function newBookButton(){
     newBookButt.style.backgroundColor = "yellow";
     newBookButt.textContent = "New Book";
     newBookButt.addEventListener("click", ()=>{
-        const modal = createModal();
+        const modal = createModal((book)=>{
+            window.myLibrary.push(book);
+            addToTable(book,document.querySelector("table"),window.myLibrary);
+        });
         modal.style.display = "block";
         document.body.appendChild(modal);
     });
